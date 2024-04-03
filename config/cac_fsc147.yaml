@@ -1,0 +1,63 @@
+DIR:
+  dataset: "./dataset"
+  exp: "cac"
+  snapshot: "./checkpoints"
+
+DATASET:
+  #name: "CARPK"
+  name: "FSC147"
+  list_train: "./datalist/train.txt"
+  list_val: "./datalist/val.txt"
+  list_test: "./datalist/test.txt"
+  exemplar_number: 3
+  downsampling_rate: 1
+
+MODEL:
+  backbone: "resnet50"
+  epf_extractor: "direct_pooling"
+  fix_bn: True
+  ep_scale_embedding: True
+  ep_scale_number: 20
+  use_bias: True
+
+  matcher: "dynamic_similarity_matcher"
+  counter: "density_x16"
+#  backbone_layer: "layer4"
+  hidden_dim: 256
+
+  matcher_layers: 6
+
+  matcher_proj_dim: 256
+  dynamic_proj_dim: 128
+  counter_dim: 257
+  repeat_times: 1
+  pretrain: True
+
+  pos_position_embedding: 'v2'
+  que_position_embedding: 'v3'
+
+
+
+TRAIN:
+  resume: "model_ckpt.pth"
+  counting_loss: "l2loss"
+  contrast_loss: "none"
+  contrast_weight: 1e-5
+  optimizer: "AdamW"
+  device: "cpu"
+  batch_size: 16
+  epochs: 300
+  lr_backbone: 1e-5
+  lr: 1e-5
+  lr_drop: 200 # We do not modify learning rate.
+  momentum: 0.95
+  weight_decay: 5e-4
+  clip_max_norm: 0.1
+  num_workers: 1
+  seed: 200
+
+VAL:
+  resume: "model_best.pth"
+  evaluate_only: False
+  visualization: False
+
